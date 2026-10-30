@@ -1,0 +1,3 @@
+// The generated code's <cstdlib>: ppc_context.h includes it, and the generated code uses nothing from it.
+#pragma once
+#include <stdlib.h>

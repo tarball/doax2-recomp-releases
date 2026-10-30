@@ -1,0 +1,27 @@
+// The generated code's <cmath>: the C runtime's functions it calls, declared as the Universal CRT declares them, so
+// that clang treats them as the same builtins. Calls stay calls to the C runtime's functions (fma without FMA3, sqrt's
+// errno path for negative and NaN inputs, exp2f and log2f), which doa4.exe exports from its own C runtime: the same
+// code computes the same results as before, on every PC.
+#pragma once
+
+extern "C"
+{
+    double __cdecl sqrt(double x);
+    float __cdecl sqrtf(float x);
+    double __cdecl fma(double x, double y, double z);
+    float __cdecl exp2f(float x);
+    float __cdecl log2f(float x);
+}
+
+namespace std
+{
+    using ::exp2f;
+    using ::fma;
+    using ::log2f;
+    using ::sqrt;
+
+    // simde's float classification where clang has no builtin of the name (__builtin_isnanf): only in simde's inline
+    // functions that the generated code doesn't call.
+    inline bool isnan(float x) noexcept { return __builtin_isnan(x); }
+    inline bool isnan(double x) noexcept { return __builtin_isnan(x); }
+}

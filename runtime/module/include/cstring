@@ -1,0 +1,16 @@
+// The generated code's <cstring>: memset (dcbz, PPC_STORE_ZERO), and memcpy, which clang calls for large copies (the
+// PPC context a setjmp keeps). clang inlines the small ones; calls go to doa4.exe's C runtime.
+#pragma once
+#include <stddef.h>
+
+extern "C"
+{
+    void* __cdecl memcpy(void* destination, const void* source, size_t size);
+    void* __cdecl memset(void* destination, int value, size_t size);
+}
+
+namespace std
+{
+    using ::memcpy;
+    using ::memset;
+}

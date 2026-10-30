@@ -1,0 +1,32 @@
+// The launcher's resources: its manifest (1, RT_MANIFEST: the process's) and version information. CMakeLists.txt fills
+// in the game's values (configure_file).
+#include <winresrc.h>
+
+1 24 "@LAUNCHER_MANIFEST@"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEFLAGS 0
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileDescription", "@GAME_TITLE@ Launcher"
+            VALUE "FileVersion", "1.0"
+            VALUE "InternalName", "@GAME_LAUNCHER@"
+            VALUE "OriginalFilename", "@GAME_LAUNCHER@.exe"
+            VALUE "ProductName", "@GAME_TITLE@ recomp"
+            VALUE "ProductVersion", "1.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

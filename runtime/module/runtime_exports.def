@@ -1,0 +1,23 @@
+; What the generated code calls in the executable besides the kernel's and XAM's imports and the runtime's replacements
+; of game functions, which tools/moduledefs.py adds to the executable's exports with these.
+; The runtime's (ppc_overrides.h):
+?DOA4QueryTimeBase@@YA_KXZ
+?GuestTrap@@YAXAEAUPPCContext@@PEAEII@Z
+?GuestSwitchOutOfRange@@YAXII@Z
+?XmaRegisterWrite@@YAXII@Z
+PPCStoreMiss
+PPCJmpBuf
+; The C runtime's, which the shims in include/ declare: the executable's own (static) C runtime, so the generated code
+; computes with the same functions as before the module, and follows _set_FMA3_enable (main.cpp) the same way. Each is
+; exported from ModuleCrt_<name>, a jump to the C runtime's function (module/crt_exports.h), not by its name alone,
+; which lld-link bound to a C++ overload of sqrt that called itself for negative inputs (ANALYSIS.md, Phase 6, The CPU
+; fights' hang); tools/moduledefs.py refuses an export the executable's objects don't define by its name alone.
+_setjmp=ModuleCrt__setjmp
+longjmp=ModuleCrt_longjmp
+memcpy=ModuleCrt_memcpy
+memset=ModuleCrt_memset
+sqrt=ModuleCrt_sqrt
+sqrtf=ModuleCrt_sqrtf
+fma=ModuleCrt_fma
+exp2f=ModuleCrt_exp2f
+log2f=ModuleCrt_log2f
