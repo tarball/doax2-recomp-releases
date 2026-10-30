@@ -7,8 +7,9 @@
 #   README.txt, licenses\
 # It stops if anything else is in it.
 # Usage: powershell -ExecutionPolicy Bypass -File tools\package.ps1 [-Version <name>] [-NoBuild] [-NoZip]
-#   -Version names the release (default: git describe): a release's is its tag in the release repository, its date and
-#   commit (v2026.10.27-e3a1ced), which the README's source link names. -NoBuild packages the Release build as it is.
+#   -Version names the release (default: git describe): a release's is its tag in the release repository, its date,
+#   time and commit (v2026.10.30.115807-f2e1697), which the README's source link names. -NoBuild packages the Release
+#   build as it is.
 param(
     [string]$Version = '',
     [switch]$NoBuild,
@@ -55,8 +56,8 @@ foreach ($file in "$executable.exe", $module, $launcher) {
 # The commit (or a version tag), not the release/<name> tags that record a release's commit, whose slash a file name
 # can't have.
 if (-not $Version) { $Version = (& git -C $root describe --always --dirty --tags --exclude 'release/*').Trim() }
-# A release's source is its tag in the release repository.
-$source = if ($Version -match '^v\d{4}\.\d{2}\.\d{2}-[0-9a-f]{7,}$') { "$sourceRepository/tree/$Version" } else { $sourceRepository }
+# A release's source is its tag in the release repository (the first releases' names have the date alone).
+$source = if ($Version -match '^v\d{4}\.\d{2}\.\d{2}(\.\d{6})?-[0-9a-f]{7,}$') { "$sourceRepository/tree/$Version" } else { $sourceRepository }
 
 $packages = Join-Path $root 'build\package'
 $package = Join-Path $packages $folderName
