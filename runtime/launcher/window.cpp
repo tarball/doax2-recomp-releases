@@ -383,10 +383,9 @@ namespace launcher
                 showPrimary = false;
                 break;
             case Screen::kNeedDisc:
-                heading = L"Choose your disc image";
-                body = (s.message.empty() ? L"" : s.message + L"\n\n") + L"The game runs from your own disc image of " GAME_TITLE " (" GAME_VERSION
-                    ") (" GAME_REGION "): it reads the game's files from it, and never changes it.";
-                primary = L"&Choose disc image...";
+                heading = L"Select your " GAME_DISC " disc image";
+                body = s.message; // what's wrong with the one tried, if one was
+                primary = L"&Select disc image...";
                 showDisc = false;
                 break;
             case Screen::kReady:
@@ -394,7 +393,7 @@ namespace launcher
                 showPlay = true;
                 break;
             case Screen::kFailed:
-                heading = L"Something's wrong";
+                heading = L"Can't start the game";
                 body = s.message;
                 primary = L"&Try again";
                 break;
@@ -473,8 +472,8 @@ namespace launcher
                 return chosen;
             const COMDLG_FILTERSPEC types[] = { { L"Disc images (*.iso)", L"*.iso" }, { L"All files", L"*.*" } };
             dialog->SetFileTypes(2, types);
-            dialog->SetTitle(L"Your disc image of " GAME_TITLE " (" GAME_VERSION ") (" GAME_REGION ")");
-            dialog->SetOkButtonLabel(L"Choose");
+            dialog->SetTitle(L"Select your " GAME_DISC " disc image");
+            dialog->SetOkButtonLabel(L"Select");
             FILEOPENDIALOGOPTIONS options = 0;
             dialog->GetOptions(&options);
             dialog->SetOptions(options | FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST | FOS_PATHMUSTEXIST | FOS_NOCHANGEDIR);

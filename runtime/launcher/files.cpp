@@ -73,7 +73,7 @@ namespace launcher
         std::wstring CannotWrite(const std::wstring& path, DWORD error)
         {
             return L"Can't write " + path + L": " + SystemMessage(error) +
-                L"\n\nPut the game in a folder you can change, such as one in Documents (not Program Files).";
+                L"\n\nMove the game to a folder you can change, such as one in Documents.";
         }
     }
 
@@ -362,17 +362,16 @@ namespace launcher
         // The game's paths are narrow strings, in this PC's code page for programs that aren't Unicode.
         const std::string narrow = NarrowPath(path);
         if (narrow.empty())
-            return L"The game can't open " + path + L": its path has characters that this PC's code page for older programs "
-                L"lacks. Move the disc image to a folder whose path has none, such as C:\\Games, or rename it.";
+            return L"The game can't open " + path + L": its path has characters it can't use. Move the disc image to a folder "
+                L"such as C:\\Games, or rename it.";
         std::vector<uint8_t> xex;
         switch (disc::ReadExecutable(narrow, xex))
         {
         case disc::Check::kOk:
             break;
         case disc::Check::kUnreadable:
-            return name + L" isn't an Xbox 360 disc image.";
         case disc::Check::kOtherGame:
-            return name + L" is another game, or another version of " GAME_TITLE " than " GAME_VERSION " (" GAME_REGION ").";
+            return name + L" doesn't appear to be a valid " GAME_DISC " disc image.";
         }
         disc.path = path;
         disc.narrow = narrow;

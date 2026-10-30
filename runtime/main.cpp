@@ -1,7 +1,7 @@
 // Recompilation runtime entry point.
 //
 // Usage: <executable> [game data directory] [disc image]
-// The game runs from its disc image: an .iso of GAME_TITLE (GAME_VERSION) next to the executable (or in the data
+// The game runs from its disc image: an .iso of GAME_DISC (CMakeLists.txt) next to the executable (or in the data
 // directory or the working directory, or settings.ini's disc_image), whose default.xex is checked by its SHA-256 (the
 // version disc_image.cpp names) and unpacked in memory (see disc_image.h). A development checkout keeps default.xex
 // and default.pe (the decrypted, decompressed image produced by tools/xexunpack.ps1) in its data directory instead,
@@ -198,12 +198,12 @@ namespace
                     return {};
                 }
             }
-            return "No disc image of " GAME_TITLE " (" GAME_VERSION ") was found.";
+            return "No " GAME_DISC " disc image was found.";
         }
 
         const std::string folder = ExecutableDirectory();
-        const std::string where = "Put your disc image of " GAME_TITLE " (" GAME_VERSION "), an .iso file, in this folder:\n\n" +
-            (folder.empty() ? std::string("the game's folder") : folder) + "\n\nThe game runs from it and doesn't change it.";
+        const std::string where = "Put your " GAME_DISC " disc image (.iso) in this folder:\n\n" +
+            (folder.empty() ? std::string("the game's folder") : folder);
         std::string problems;
         for (const std::string& candidate : images)
         {
@@ -222,14 +222,12 @@ namespace
                 LOG_INFO("Game from %s", candidate.c_str());
                 return {};
             case disc::Check::kUnreadable:
-                problems += "\n- " + name + " isn't an Xbox 360 disc image.";
-                break;
             case disc::Check::kOtherGame:
-                problems += "\n- " + name + " is another game, or another version of it.";
+                problems += "\n- " + name + " doesn't appear to be a valid " GAME_DISC " disc image.";
                 break;
             }
         }
-        return problems.empty() ? where : "No disc image of " GAME_TITLE " (" GAME_VERSION ") was found:" + problems + "\n\n" + where;
+        return problems.empty() ? where : "No " GAME_DISC " disc image was found:" + problems + "\n\n" + where;
     }
 
     bool MountDevices(const std::string& dataDirectory, const std::string& discImage)

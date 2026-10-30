@@ -4,15 +4,21 @@ cmake_minimum_required(VERSION 3.25)
 cmake_policy(SET CMP0141 NEW)
 
 # The game. GAME_PREFIX names the targets and, in lower case, the executable (doax2.exe) and its log; the runtime
-# reads its environment variables with it (DOAX2_TRACE, ...) and gets GAME_TITLE for its window and messages, and
-# GAME_VERSION, the version of the game it supports, for the messages about its disc image. The runtime's sources only
-# use these macros, so they can stay the same as doa4-recomp's. GAME_LAUNCHER names the launcher, what a player starts
-# in a release ("DOAX2 Launcher.exe", runtime/launcher/), and GAME_REGION the regions of the disc it supports, which
-# the launcher names with the version.
+# reads its environment variables with it (DOAX2_TRACE, ...) and gets GAME_TITLE for its window and messages. The
+# runtime's sources only use these macros, so they can stay the same as doa4-recomp's. GAME_VERSION is the version of
+# the game it supports, when the game had more than one (DOAX2 had one: none), and GAME_REGION the regions of the disc;
+# with the title they make GAME_DISC, the disc image players need as the launcher and the messages name it ("Dead or
+# Alive Xtreme 2 (USA)"). GAME_LAUNCHER names the launcher, what a player starts in a release ("DOAX2 Launcher.exe",
+# runtime/launcher/).
 set(GAME_PREFIX DOAX2)
 set(GAME_TITLE "Dead or Alive Xtreme 2")
-set(GAME_VERSION "the original release")
+set(GAME_VERSION "")
 set(GAME_REGION "USA")
+if (GAME_VERSION)
+    set(GAME_DISC "${GAME_TITLE} (${GAME_VERSION}) (${GAME_REGION})")
+else()
+    set(GAME_DISC "${GAME_TITLE} (${GAME_REGION})")
+endif()
 string(TOLOWER "${GAME_PREFIX}" GAME_EXECUTABLE)
 set(GAME_LAUNCHER "${GAME_PREFIX} Launcher")
 # GAME_UTILITY_DRIVE: whether the hard disk has its raw Partition0, where XAPI keeps the header of the cache partition a
@@ -156,7 +162,7 @@ target_compile_options(${GAME_PREFIX}Runtime PUBLIC /arch:AVX "/FI${CMAKE_SOURCE
 # return (runtime/store_miss.cpp).
 set_source_files_properties(runtime/store_miss.cpp PROPERTIES COMPILE_OPTIONS "/clang:-mno-vzeroupper")
 target_compile_definitions(${GAME_PREFIX}Runtime PUBLIC NOMINMAX WIN32_LEAN_AND_MEAN _CRT_SECURE_NO_WARNINGS
-    "GAME_PREFIX=\"${GAME_PREFIX}\"" "GAME_TITLE=\"${GAME_TITLE}\"" "GAME_VERSION=\"${GAME_VERSION}\""
+    "GAME_PREFIX=\"${GAME_PREFIX}\"" "GAME_TITLE=\"${GAME_TITLE}\"" "GAME_DISC=\"${GAME_DISC}\""
     "GAME_EXECUTABLE=\"${GAME_EXECUTABLE}\"" "GAME_LAUNCHER=\"${GAME_LAUNCHER}.exe\""
     "GAME_SYSTEM_UI_NOTIFICATIONS=${GAME_SYSTEM_UI_NOTIFICATIONS}")
 # The build's configuration, which netplay's handshake reports with the build (runtime/netplay/identity.h).
@@ -324,8 +330,8 @@ set_target_properties(${GAME_PREFIX}Launcher PROPERTIES OUTPUT_NAME "${GAME_LAUN
 set_property(SOURCE "${CMAKE_CURRENT_BINARY_DIR}/launcher/launcher.rc" APPEND PROPERTY OBJECT_DEPENDS "${LAUNCHER_MANIFEST}")
 target_include_directories(${GAME_PREFIX}Launcher PRIVATE runtime)
 target_compile_definitions(${GAME_PREFIX}Launcher PRIVATE $<$<COMPILE_LANGUAGE:CXX>:NOMINMAX WIN32_LEAN_AND_MEAN UNICODE _UNICODE
-    _CRT_SECURE_NO_WARNINGS "GAME_PREFIX=\"${GAME_PREFIX}\"" "GAME_TITLE=\"${GAME_TITLE}\"" "GAME_VERSION=\"${GAME_VERSION}\""
-    "GAME_REGION=\"${GAME_REGION}\"" "GAME_EXECUTABLE=\"${GAME_EXECUTABLE}\"" GAME_NETPLAY=${GAME_NETPLAY}>)
+    _CRT_SECURE_NO_WARNINGS "GAME_PREFIX=\"${GAME_PREFIX}\"" "GAME_TITLE=\"${GAME_TITLE}\"" "GAME_DISC=\"${GAME_DISC}\""
+    "GAME_EXECUTABLE=\"${GAME_EXECUTABLE}\"" GAME_NETPLAY=${GAME_NETPLAY}>)
 target_link_libraries(${GAME_PREFIX}Launcher PRIVATE comctl32 ole32 shell32 shlwapi uuid bcrypt ws2_32)
 # The manifest is the resource's (launcher.rc.in), not one the linker makes.
 target_link_options(${GAME_PREFIX}Launcher PRIVATE /MANIFEST:NO)

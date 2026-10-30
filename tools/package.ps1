@@ -16,11 +16,9 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-# The game: CMakeLists.txt's GAME_TITLE, GAME_VERSION, GAME_REGION, GAME_PREFIX, the executable and the launcher
-# (GAME_LAUNCHER).
+# The game: CMakeLists.txt's GAME_TITLE, GAME_DISC, GAME_PREFIX, the executable and the launcher (GAME_LAUNCHER).
 $title = 'Dead or Alive Xtreme 2'
-$gameVersion = 'the original release'
-$gameRegion = 'USA'
+$disc = 'Dead or Alive Xtreme 2 (USA)'
 $prefix = 'DOAX2'
 $executable = 'doax2'
 $launcher = "$prefix Launcher.exe"
@@ -28,6 +26,7 @@ $folderName = 'doax2-recomp'
 # The release repository, a commit and a tag a release, and the XenonRecomp fork.
 $sourceRepository = 'https://github.com/tarball/doax2-recomp-releases'
 $xenonRepository = 'https://github.com/tarball/XenonRecomp'
+$xenonUpstream = 'https://github.com/hedge-dev/XenonRecomp'
 
 # XenonRecomp: XENONRECOMP_ROOT, else beside this checkout, else (in a worktree) beside the main checkout, as env.cmd.
 # Its licenses, and those of what it puts in the game's code, go in the release.
@@ -56,7 +55,6 @@ foreach ($file in "$executable.exe", $module, $launcher) {
 # The commit (or a version tag), not the release/<name> tags that record a release's commit, whose slash a file name
 # can't have.
 if (-not $Version) { $Version = (& git -C $root describe --always --dirty --tags --exclude 'release/*').Trim() }
-$xenonCommit = (& git -C $xenonRecomp rev-parse HEAD).Trim()
 # A release's source is its tag in the release repository.
 $source = if ($Version -match '^v\d{4}\.\d{2}\.\d{2}-[0-9a-f]{7,}$') { "$sourceRepository/tree/$Version" } else { $sourceRepository }
 
@@ -90,44 +88,30 @@ Set-Content (Join-Path $licenses 'FFmpeg.txt') -Encoding UTF8 ("The FFmpeg DLLs 
 $readme = @"
 $title for Windows ($Version)
 
-A recompilation of the Xbox 360 game for Windows. This folder holds the game's code, recompiled, but none of the
-game's data: it needs your own disc image of $title ($gameVersion) ($gameRegion), which the game reads its files
-from and never changes.
+An unofficial Windows port of the Xbox 360 game. It doesn't include any of the game's resources: you need your own
+$disc disc image to play.
 
 To play
-1. Keep this folder somewhere you can change, such as in Documents (not Program Files).
-2. Start "$launcher". Windows may say it doesn't recognize the app, since it isn't signed: choose More info, then
-   Run anyway.
-3. Choose your disc image of $title ($gameVersion) ($gameRegion), an .iso file. The launcher remembers it.
-4. Press Launch.
+1. Keep this folder somewhere you can write to, such as in Documents (not Program Files).
+2. Run "$launcher". If Windows says it doesn't recognize the app, choose More info, then Run anyway.
+3. Select your $disc disc image, then press Launch.
 
-It needs 64-bit Windows 10 or 11, a processor with AVX (from 2011 on), a graphics card with Direct3D 12, and about
-2 GB of free space here for the game's hard disk cache.
+Requirements: 64-bit Windows 10 or 11, a processor with AVX, a graphics card with Direct3D 12, and about 2 GB of free
+disk space.
 
-Controls: an Xbox controller, or another controller that works as one (XInput). PlayStation controllers need a tool
-that presents them as an Xbox controller, such as DS4Windows. The keyboard works too: arrows or WASD move, Enter is
-Start, Backspace is Back, Z, J or Space is A, X or K is B, C or U is X, V or I is Y, Q and E are the shoulder buttons,
-and 1 and 3 the triggers.
+Controls: an Xbox controller or any XInput controller. Keyboard: arrows or WASD move, Enter is Start, Backspace is
+Back, Z/J/Space is A, X/K is B, C/U is X, V/I is Y, Q and E are the shoulder buttons, 1 and 3 the triggers.
 
-OPTIONS > Video Settings in the game has the PC's options between the game's own: Fullscreen, Resolution (up to 4
-times 1280x720), Anti-Aliasing, Alpha to Coverage and Texture Filtering. Alt+Enter also switches fullscreen.
+Graphics options are in OPTIONS > Video Settings. Alt+Enter toggles fullscreen.
 
-The data folder the game makes here holds its settings, saves, hard disk cache, shader cache and log
-($executable.log). The first run copies 1.7 GB of the game from the disc image to its hard disk cache, as the console
-does: this takes about 7 minutes and happens in the background while you play. It also compiles the game's shaders in
-the background, which takes a minute or two: until then parts of a scene can appear a moment late. Later runs use
-both.
+The first run copies 1.7 GB of the game to its hard disk cache in the background (about 7 minutes). Saves, settings
+and the log ($executable.log) are in the data folder.
 
-Xbox Live is gone: XBOX LIVE on the title menu goes back to the menu, as when you back out of signing in.
-
-To update, extract the new release over this one: the data folder, with your saves, settings and the hard disk cache,
-stays.
+To update, extract a new release over this one. The data folder is kept.
 
 Source: $source
-The game's code was recompiled with XenonRecomp: $xenonRepository, branch doa4, commit $xenonCommit
-This project is free software under the GNU General Public License, version 3 (licenses\$folderName (GPL-3.0).txt).
-The game's own code in $module, recompiled, isn't covered by it. The licenses of the rest of what's in this
-folder are in the licenses folder too.
+Recompiled with a fork of XenonRecomp: $xenonRepository (XenonRecomp: $xenonUpstream)
+License: GPL-3.0 (licenses\$folderName (GPL-3.0).txt). The licenses folder also has those of the libraries included.
 "@
 Set-Content (Join-Path $package 'README.txt') -Encoding ASCII ($readme -replace "`r?`n", "`r`n")
 

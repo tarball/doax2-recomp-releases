@@ -62,13 +62,12 @@ namespace launcher
         show(L"Checking the game's files...");
         if (const std::wstring missing = MissingFile(folder); !missing.empty())
         {
-            message = L"This release isn't complete: " + missing + L" is missing from " + folder.root +
-                L".\n\nExtract the whole zip again, to a folder of its own.";
+            message = missing + L" is missing from " + folder.root + L".\n\nExtract the release's zip again, to a folder of its own.";
             return Readiness::kFailed;
         }
         if (!HasAvx())
         {
-            message = L"This PC's processor doesn't have AVX, which the game needs: processors from 2011 on have it.";
+            message = L"The game needs a processor with AVX (most from 2011 on), which this PC's doesn't have.";
             return Readiness::kFailed;
         }
 

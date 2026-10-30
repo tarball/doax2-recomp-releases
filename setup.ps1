@@ -1,6 +1,6 @@
 # Builds Dead or Alive Xtreme 2 from source for your own disc image: checks the tools, extracts and unpacks the game's
 # executable, recompiles it, builds the game, and puts it in a folder of its own with a shortcut. A release does
-# without all this: its doax2.exe runs from the disc image as it is (see INSTALL.md). The game made here works the same
+# without all this: its doax2.exe runs from the disc image as it is (see README.md). The game made here works the same
 # way, reading the game from the disc image that settings.ini points at.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File setup.ps1 [-Iso <disc image>] [-Destination <folder>]
@@ -27,13 +27,13 @@ Step 'Checking the tools'
 $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
 $vs = $null
 if (Test-Path $vswhere) { $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang -property installationPath }
-if (-not $vs) { Fail 'Needs Visual Studio 2026 (Build Tools or any edition) with "Desktop development with C++" and "C++ Clang tools for Windows" (see INSTALL.md).' }
+if (-not $vs) { Fail 'Needs Visual Studio 2026 (Build Tools or any edition) with "Desktop development with C++" and "C++ Clang tools for Windows" (see BUILD.md).' }
 Write-Host "Visual Studio: $vs"
-if (-not (Get-Command python -ErrorAction SilentlyContinue)) { Fail 'Needs Python 3 (see INSTALL.md).' }
+if (-not (Get-Command python -ErrorAction SilentlyContinue)) { Fail 'Needs Python 3 (see BUILD.md).' }
 $xenonRecomp = $env:XENONRECOMP_ROOT
 if (-not $xenonRecomp) { $xenonRecomp = Join-Path (Split-Path $root -Parent) 'XenonRecomp' }
 if (-not (Test-Path (Join-Path $xenonRecomp 'thirdparty\simde\x86'))) {
-    Fail "Needs the XenonRecomp checkout (doa4 branch, with its submodules) at $xenonRecomp, or XENONRECOMP_ROOT set to it (see INSTALL.md)."
+    Fail "Needs the XenonRecomp checkout (doa4 branch, with its submodules) at $xenonRecomp, or XENONRECOMP_ROOT set to it (see BUILD.md)."
 }
 Write-Host "XenonRecomp: $xenonRecomp"
 

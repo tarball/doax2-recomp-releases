@@ -1,39 +1,50 @@
 # Dead or Alive Xtreme 2 for Windows
 
-A recompilation of the Xbox 360 game Dead or Alive Xtreme 2 into a Windows program. The game's PowerPC code is
-translated to C++ by [XenonRecomp](https://github.com/tarball/XenonRecomp) (a fork of it, branch `doa4`, which also
-serves Dead or Alive 4's recompilation), and runs on a runtime of its own: the console's kernel and system calls, its
-hard disk cache, a Direct3D 12 renderer for its graphics, and its XMA audio, movies and radio.
+An unofficial Windows port of the Xbox 360 version of Dead or Alive Xtreme 2, made by static recompilation with a
+[fork](https://github.com/tarball/XenonRecomp) of [XenonRecomp](https://github.com/hedge-dev/XenonRecomp).
 
-**None of the game's files are here, and the releases hold its code, recompiled, but none of its data** (its models,
-textures, sounds and movies). You need your own disc image of Dead or Alive Xtreme 2 (USA), an `.iso` file, which the
-launcher checks and remembers and the game reads its files from, never changing it.
+**This repository doesn't include any of the game's resources. You need your own Dead or Alive Xtreme 2 (USA) disc
+image to play.**
+
+## Requirements
+
+- 64-bit Windows 10 or 11
+- A processor with AVX (most from 2011 on)
+- A graphics card with Direct3D 12
+- About 2 GB of free disk space
+- Your Dead or Alive Xtreme 2 (USA) disc image (.iso)
+
+## How to install
+
+1. Download the latest release's zip from [Releases](https://github.com/tarball/doax2-recomp-releases/releases).
+2. Extract it to a folder of its own that you can write to, such as one in Documents (not Program Files).
+3. Run `DOAX2 Launcher.exe`. If Windows says it doesn't recognize the app, choose More info, then Run anyway.
+4. Select your Dead or Alive Xtreme 2 (USA) disc image, then press Launch.
+
+To update, extract a new release over the old one. Your saves and settings are kept.
 
 ## Playing
 
-Download the zip of the latest release from [the releases](https://github.com/tarball/doax2-recomp-releases/releases),
-extract it to a folder of its own that you can change (such as one in Documents), and start `DOAX2 Launcher.exe`.
-[INSTALL.md](INSTALL.md) has what it needs (64-bit Windows 10 or 11, a processor with AVX, a graphics card with
-Direct3D 12, about 2 GB for the game's hard disk cache), the controls and settings, and updating.
+- **Controls:** an Xbox controller or any XInput controller (PlayStation controllers need a tool such as DS4Windows).
+  Keyboard: arrows or WASD move, Enter is Start, Backspace is Back, Z/J/Space is A, X/K is B, C/U is X, V/I is Y, Q
+  and E are the shoulder buttons, 1 and 3 the triggers.
+- **Graphics options:** OPTIONS > Video Settings has Fullscreen, Resolution (up to 4 times 1280x720), Anti-Aliasing,
+  Alpha to Coverage and Texture Filtering. Alt+Enter toggles fullscreen.
+- **First run:** the game copies 1.7 GB from the disc image to its hard disk cache in the background (about 7
+  minutes) and compiles its shaders, so some scenes can appear a moment late.
+- **Xbox Live** isn't available: XBOX LIVE on the title menu goes back to the menu.
+- Saves, settings and the log (`doax2.log`) are in the `data` folder.
 
-Xbox Live is gone: XBOX LIVE on the title menu goes back to the menu, as when you back out of signing in.
+## Known issues
 
-## Building from source
+- At the casino's roulette, the table is sometimes drawn blurred.
+- A 0 in the roulette's bet and money values can show a stroke through it.
 
-[INSTALL.md's Building from source](INSTALL.md#building-from-source): with Visual Studio's C++ and Clang tools, Python
-and Git, `setup.ps1` checks your disc image, recompiles the game's code and builds the game.
+## Building
 
-## This repository
+See [BUILD.md](BUILD.md).
 
-Each commit is a release, tagged by its date and its own short hash (`v2026.10.27-e3a1ced`), and the release of the
-same name has its zip. Its notes name the XenonRecomp commit it was built with.
+## License
 
-## Licenses
-
-This project is free software under the GNU General Public License, version 3: see [LICENSE](LICENSE).
-
-A release's `licenses` folder has that license and those of what it ships and what's compiled into it: XenonRecomp's
-(its `ppc_context.h` is in the game's code), simde, xxHash, FFmpeg (LGPL), and Xenia's (BSD-3-Clause), whose work
-parts of the runtime follow. The game's own code, recompiled, isn't covered by this project's license.
-
-This project isn't affiliated with or endorsed by Koei Tecmo, Team NINJA or Microsoft.
+GNU General Public License, version 3: see [LICENSE](LICENSE). Releases include the licenses of the libraries they
+ship. This project isn't affiliated with or endorsed by Koei Tecmo, Team NINJA or Microsoft.
