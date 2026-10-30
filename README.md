@@ -35,11 +35,6 @@ To update, extract a new release over the old one. Your saves and settings are k
 - **Xbox Live** isn't available: XBOX LIVE on the title menu goes back to the menu.
 - Saves, settings and the log (`doax2.log`) are in the `data` folder.
 
-## Known issues
-
-- At the casino's roulette, the table is sometimes drawn blurred.
-- A 0 in the roulette's bet and money values can show a stroke through it.
-
 ## Building
 
 See [BUILD.md](BUILD.md).

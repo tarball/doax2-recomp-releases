@@ -99,8 +99,9 @@ To play
 Requirements: 64-bit Windows 10 or 11, a processor with AVX, a graphics card with Direct3D 12, and about 2 GB of free
 disk space.
 
-Controls: an Xbox controller or any XInput controller. Keyboard: arrows or WASD move, Enter is Start, Backspace is
-Back, Z/J/Space is A, X/K is B, C/U is X, V/I is Y, Q and E are the shoulder buttons, 1 and 3 the triggers.
+Controls: an Xbox controller or any XInput controller (PlayStation controllers need a tool such as DS4Windows).
+Keyboard: arrows or WASD move, Enter is Start, Backspace is Back, Z/J/Space is A, X/K is B, C/U is X, V/I is Y, Q and
+E are the shoulder buttons, 1 and 3 the triggers.
 
 Graphics options are in OPTIONS > Video Settings. Alt+Enter toggles fullscreen.
 
